@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solitaire Finz Mart - Preview</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: #060709;
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* --- Background Blend Layers --- */
+    .bg-image-layer {
+      position: fixed;
+      inset: 0;
+      background-image: url('background.jpg'); /* Replace with your image path */
+      background-size: cover;
+      background-position: center;
+      opacity: 0.16;
+      filter: blur(2px) saturate(85%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .bg-gradient-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(
+        circle at 50% 40%,
+        rgba(6, 7, 9, 0.4) 0%,
+        rgba(6, 7, 9, 0.95) 85%
+      );
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* --- Layout Elements --- */
+    .page-wrapper {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 24px 64px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Navbar */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 32px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #d4af37;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .brand-icon {
+      font-size: 14px;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: #d4af37;
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(212, 175, 55, 0.1);
+    }
+
+    /* Main Grid */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 56px;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    /* Left Hero */
+    .eyebrow {
+      color: #bfa15f;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 42px;
+      line-height: 1.25;
+      font-weight: 400;
+      letter-spacing: 1px;
+      color: #ffffff;
+      margin-bottom: 24px;
+    }
+
+    h1 span {
+      color: #e5b842;
+      display: block;
+    }
+
+    .hero-desc {
+      font-family: Georgia, "Times New Roman", serif;
+      font-style: italic;
+      color: #9ca3af;
+      font-size: 15px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+      max-width: 500px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .btn-primary {
+      background-color: #d4af37;
+      color: #111;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: 4px;
+      border: none;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #e5e7eb;
+      padding: 10px 22px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .audit-note {
+      font-size: 12px;
+      font-style: italic;
+      color: #6b7280;
+    }
+
+    /* Right Auth Card (Glassmorphism) */
+    .auth-card {
+      background: rgba(14, 16, 20, 0.72);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(212, 175, 55, 0.22);
+      border-radius: 8px;
+      padding: 36px 32px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .auth-title {
+      font-family: Georgia, serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .auth-subtitle {
+      font-size: 13px;
+      font-style: italic;
+      color: #9ca3af;
+      margin-bottom: 24px;
+    }
+
+    .auth-toggle {
+      display: flex;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #9ca3af;
+      cursor: pointer;
+    }
+
+    .auth-tab.active {
+      background: #d4af37;
+      color: #111;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      color: #d1d5db;
+      margin-bottom: 6px;
+    }
+
+    .input-field {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 10px 12px;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 13px;
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: #d4af37;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: #d4af37;
+      color: #111;
+      border: none;
+      padding: 10px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 8px;
+      margin-bottom: 18px;
+    }
+
+    /* Seeded accounts panel */
+    .demo-box {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 4px;
+      padding: 12px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .demo-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-family: monospace;
+    }
+
+    /* Bottom Features Bar */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      background: rgba(14, 16, 20, 0.65);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212, 175, 55, 0.15);
+      border-radius: 6px;
+      padding: 24px 32px;
+      margin-top: 40px;
+    }
+
+    .feature-title {
+      color: #d4af37;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .feature-text {
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Elements -->
+  <div class="bg-image-layer"></div>
+  <div class="bg-gradient-overlay"></div>
+
+  <!-- Page Content -->
+  <div class="page-wrapper">
+    <header>
+      <div class="brand">
+        <span class="brand-icon">◆</span> SOLITAIRE FINZ MART
+      </div>
+      <div class="nav-actions">
+        <button class="btn-ghost">Login</button>
+        <button class="btn-ghost">Register</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="hero-left">
+        <div class="eyebrow">Loan Origination • Distribution • Payouts</div>
+        <h1>ONE CONSOLE FOR THE<span>ENTIRE LOAN JOURNEY.</span></h1>
+        <p class="hero-desc">
+          Lead capture, KYC and document verification, credit / legal / technical
+          appraisal, sanction letters, tranche disbursement and channel payouts —
+          with action-level role-based access on every screen.
+        </p>
+        <div class="hero-buttons">
+          <button class="btn-primary">Get started — it's free</button>
+          <button class="btn-outline">Login to your console</button>
+        </div>
+        <div class="audit-note">Access is logged. Every sign-in, approval and override is written to the audit trail.</div>
+      </div>
+
+      <div class="auth-right">
+        <div class="auth-card">
+          <div class="auth-title">SIGN IN</div>
+          <div class="auth-subtitle">Use your work email. Your role decides which modules open.</div>
+          
+          <div class="auth-toggle">
+            <div class="auth-tab active">Sign in</div>
+            <div class="auth-tab">Sign up</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Work email</label>
+            <input type="email" class="input-field" placeholder="name@solitairefinzmart.in">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" class="input-field" placeholder="••••••••••••">
+          </div>
+
+          <button class="btn-submit">Sign in</button>
+
+          <div class="demo-box">
+            <div style="margin-bottom: 8px; color: #d4af37;">Demo accounts (Password: Solitaire@2026)</div>
+            <div class="demo-row"><span>sachin.kale@solitairefinzmart.demo</span><span>Super Admin</span></div>
+            <div class="demo-row"><span>ritika.malhotra@solitairefinzmart.demo</span><span>Admin</span></div>
+            <div class="demo-row"><span>arjun.deshpande@solitairefinzmart.demo</span><span>Sales Manager</span></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="features-grid">
+      <div>
+        <div class="feature-title">ROLE-AWARE ONBOARDING</div>
+        <p class="feature-text">Register once — your role and department decide which modules open, down to each action.</p>
+      </div>
+      <div>
+        <div class="feature-title">END-TO-END TRACKING</div>
+        <p class="feature-text">Leads, appraisals, sanctions, disbursements and payouts stay linked on a single timeline.</p>
+      </div>
+      <div>
+        <div class="feature-title">AUDIT-GRADE CONTROL</div>
+        <p class="feature-text">Every approval, override and document verification is written to an immutable audit trail.</p>
+      </div>
+    </div>
+
+    <footer>
+      © 2026 Solitaire Finz Mart • Loan origination & distribution platform
+    </footer>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+/* Body/Main Container setup */
+.page-container {
+  position: relative;
+  min-height: 100vh;
+  background-color: #08090b; /* Deep luxury charcoal/black base */
+  color: #f3f4f6;
+  overflow-x: hidden;
+}
+
+/* Background Image with Opacity & Gradient Mask */
+.page-container::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url('background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.18; /* Keep opacity between 0.12 and 0.20 for optimal contrast */
+  filter: blur(2px) saturate(85%); /* Subtle blur prevents sharp lines from competing with text */
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Vignette overlay to darken edges and center content */
+.page-container::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(8, 9, 11, 0.4) 0%,
+    rgba(8, 9, 11, 0.95) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Ensure UI content sits above the background layers */
+.content-wrapper {
+  position: relative;
+  z-index: 2;
+}
+
+/* Card & Form Container Glass Effect */
+.card-surface {
+  background: rgba(18, 20, 24, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.18); /* Muted gold border */
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+}
