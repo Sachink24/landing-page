@@ -16,7 +16,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.18; /* Keep opacity between 0.12 and 0.20 for optimal contrast */
+  opacity: 0.20; /* Keep opacity between 0.12 and 0.20 for optimal contrast */
   filter: blur(2px) saturate(85%); /* Subtle blur prevents sharp lines from competing with text */
   pointer-events: none;
   z-index: 0;
